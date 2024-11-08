@@ -39,12 +39,13 @@ Para executar o projeto localmente, siga os passos abaixo:
 
 A aplicação estará disponível em http://localhost:8080.
 
-Estrutura do Projeto
-src/: Contém os componentes Vue e a lógica da aplicação.
-public/: Arquivos públicos da aplicação.
-package.json: Configurações e dependências do projeto.
-Contribuição
+Estrutura do Projeto:
+ - src/: Contém os componentes Vue e a lógica da aplicação.
+ - public/: Arquivos públicos da aplicação.
+ - package.json: Configurações e dependências do projeto.
+
+Contribuição: 
 Este projeto foi desenvolvido exclusivamente para fins acadêmicos e não está aberto para contribuições externas.
 
-Créditos
+Créditos:
 Projeto desenvolvido por Marcos Lima e Fabio Mota como atividade prática para o aprendizado de Vue.js.
