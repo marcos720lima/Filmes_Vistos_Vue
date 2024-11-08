@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" crossorigin="anonymous">
+  <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+  <link rel="stylesheet" href="appvue.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+  <title>Cinéfilo List</title>
+</head>
+
+<body>
+  <div class="container" id="app">
+    <div class="centered-form">
+      <h2 class="text-center">Qual seu último filme visto?</h2>
+      <hr />
+      <div class="form-group">
+        <input placeholder="Filme" type="text" name="nomeFilme" class="form-control" v-model="nomeFilme" />
+      </div>
+      <div class="form-group">
+        <input type="date" name="dataAssistida" class="form-control" v-model="dataAssistida" />
+      </div>
+      <div class="form-group">
+        <textarea placeholder="Avaliação" name="comentario" class="form-control" v-model="comentario"></textarea>
+      </div>
+      <div class="form-group">
+        <label>Nota (de 1 a 5):</label>
+        <div>
+          <span 
+            v-for="estrela in 5" 
+            :key="estrela" 
+            @click="avaliarFilme(estrela)" 
+            :class="{'text-warning': estrela <= nota, 'text-muted': estrela > nota}" 
+            class="fa fa-star fa-2x"
+          ></span>
+        </div>
+      </div>
+      <button v-on:click="adicionarInfo" type="submit" class="btn cherry-red-btn btn-block">Adicionar</button>
+      <button v-on:click="limparTudo" type="button" class="btn clear-btn btn-block mt-2">Limpar Tudo</button>
+    </div>
+
+    <div class="cards-container mt-4">
+      <div
+        class="filme-card"
+        v-for="(info, indice) in todasInfos"
+        :key="indice"
+        @click="toggleInfo(indice)"
+        :class="{ 'active': indiceAtivo === indice }"
+      >
+        <p><strong>{{ info.nomeFilme }}</strong></p>
+        <div class="filme-info" v-if="indiceAtivo === indice">
+          <p>Data assistida: <strong>{{ info.dataAssistida }}</strong></p>
+          <p>Avaliação: {{ info.comentario || 'Sem avaliação' }}</p>
+          <p>Nota: 
+            <span v-for="estrela in 5" :key="estrela" :class="{'text-warning': estrela <= info.nota, 'text-muted': estrela > info.nota}" class="fa fa-star"></span>
+          </p>
+        </div>
+        <button class="edit-btn mt-2" v-on:click.stop="editarInfo(indice)">Editar</button>
+        <button class="delete-btn mt-2" v-on:click.stop="removerInfo(indice)">Excluir</button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    new Vue({
+      el: '#app',
+      data() {
+        return {
+          info: [],
+          nomeFilme: '',
+          dataAssistida: '',
+          comentario: '',
+          nota: 0,
+          indiceAtivo: null,
+          indiceEdicao: null
+        };
+      },
+      created() {
+        const infoSalva = localStorage.getItem('info');
+        if (infoSalva) {
+          this.info = JSON.parse(infoSalva);
+        }
+      },
+      methods: {
+        adicionarInfo() {
+          if (this.nomeFilme.trim() === '' || this.dataAssistida.trim() === '' || this.nota === 0) {
+            return;
+          }
+
+          if (this.indiceEdicao !== null) {
+            Vue.set(this.info, this.indiceEdicao, {
+              nomeFilme: this.nomeFilme,
+              dataAssistida: this.dataAssistida,
+              comentario: this.comentario,
+              nota: this.nota
+            });
+            this.indiceEdicao = null;
+          } else {
+            this.info.push({
+              nomeFilme: this.nomeFilme,
+              dataAssistida: this.dataAssistida,
+              comentario: this.comentario,
+              nota: this.nota
+            });
+          }
+
+          this.salvarInfo();
+          this.nomeFilme = '';
+          this.dataAssistida = '';
+          this.comentario = '';
+          this.nota = 0;
+        },
+        editarInfo(indice) {
+          const info = this.info[indice];
+          this.nomeFilme = info.nomeFilme;
+          this.dataAssistida = info.dataAssistida;
+          this.comentario = info.comentario;
+          this.nota = info.nota;
+          this.indiceEdicao = indice;
+        },
+        removerInfo(indice) {
+          this.info.splice(indice, 1);
+          this.salvarInfo();
+        },
+        limparTudo() {
+          this.info = [];
+          localStorage.removeItem('info');
+        },
+        salvarInfo() {
+          localStorage.setItem('info', JSON.stringify(this.info));
+        },
+        toggleInfo(indice) {
+          this.indiceAtivo = this.indiceAtivo === indice ? null : indice;
+        },
+        avaliarFilme(estrela) {
+          this.nota = estrela;
+        }
+      },
+      computed: {
+        todasInfos() {
+          return this.info;
+        }
+      },
+      watch: {
+        info: {
+          handler() {
+            this.salvarInfo();
+          },
+          deep: true
+        }
+      }
+    });
+  </script>
+</body>
+</html>

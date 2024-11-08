@@ -1,0 +1,71 @@
+body {
+    background-image: url('https://wallpapers.com/images/high/movie-theater-background-1920-x-1080-ap14a18y3n7z8df0.webp');
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+}
+
+.centered-form {
+    max-width: 500px;
+    margin: 50px auto;
+    padding: 20px;
+    background-color: #ffffff;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+.cherry-red-btn, .clear-btn {
+    background-color: #b22222;
+    border-color: #b22222;
+    color: #ffffff;
+}
+
+.cherry-red-btn:hover, .clear-btn:hover {
+    background-color: #a21d1d;
+    border-color: #a21d1d;
+}
+
+.delete-btn, .edit-btn {
+    background-color: #b22222;
+    color: #ffffff;
+    border: none;
+    padding: 5px 10px;
+    cursor: pointer;
+    border-radius: 20px;
+}
+
+.delete-btn:hover, .edit-btn:hover {
+    background-color: #a21d1d;
+}
+
+.filme-card {
+    background-color: #ffffff;
+    border: 1px solid #b22222;
+    color: #000000;
+    padding: 10px;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    margin: 10px;
+    width: calc(33.333% - 20px);
+    box-sizing: border-box;
+}
+
+.filme-card:hover {
+    background-color: #ffe6e6;
+}
+
+.filme-info {
+    display: none;
+}
+
+.filme-card.active .filme-info {
+    display: block;
+}
+
+.cards-container {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+}
